@@ -18,9 +18,9 @@ int getLength(char* str)
 
 char* concat(const char* str1, const char* str2)
 {
-    char* strto = (char*)malloc(strlen(str1) + strlen(str2) + 1);
-    int tlen = strlen(str1), i;
-    strcpy(strto, str1);
+    char* strto = (char*)malloc(getLength(str1) + getLength(str2) + 1);
+    int tlen = getLength(str1), i;
+	for (i = 0; str2[i] != '\0'; i++) strto[i] = str1[i];
     for (i = 0; str2[i] != '\0'; i++) strto[tlen + i] = str2[i];
     strto[tlen + i] = '\0';
     return strto;
@@ -128,7 +128,6 @@ int write_data_file(dtype* arr, const size_t size, char* file_name, const char t
 
 int read_data_file(dtype* arr, const size_t size, char* file_name, const char token, const type_t data_type)
 {
-
 	int i; // for iteration
 	FILE* inout_fp;
 	char* fn = NULL; // temp file name

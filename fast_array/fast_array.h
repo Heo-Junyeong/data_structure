@@ -20,6 +20,8 @@ void sin_(dtype* arr, const size_t size, float f0, float fs, float phase);
 void sin_pidx(dtype* arr, const size_t size, float f0, float fs, float phase, pIdx idx);
 void cos_(dtype* arr, const size_t size, float f0, float fs, float phase);
 void cos_pidx(dtype* arr, const size_t size, float f0, float fs, float phase, pIdx idx);
+void scaling(dtype* arr, const size_t size, dtype scailing_factor);
+void scaling_pidx(dtype* arr, const size_t size, dtype scailing_factor, pIdx idx);
 
 /******************************************************************************
 **                          FUNCTION DEFINITIONS
@@ -60,6 +62,15 @@ dtype dot_product4(dtype* arr1, dtype* arr2, const size_t size, pIdx ptr_idx1, p
 #define fa_fast_cdot dot_product_dpidx
 
 /******************************************************************************
+**                          FUNCTION IMPLEMENTAION
+**                          FAST SIGNAL GENERATION
+*******************************************************************************/
+void fast_sin(dtype * arr, const size_t size, float f0, float fs);
+void fast_cos(dtype * arr, const size_t size, float f0, float fs);
+void fast_sin_pidx(dtype * arr, const size_t size, float f0, float fs, pIdx idx);
+void fast_cos_pidx(dtype * arr, const size_t size, float f0, float fs, pIdx idx);
+
+/******************************************************************************
 **                          FUNCTION DEFINITIONS
 **                          ADAPTIVE ALGORITHM
 *******************************************************************************/
@@ -78,6 +89,9 @@ dtype fast_least_mean_square(dtype * x, dtype * h, dtype * desired, dtype * y, d
 *******************************************************************************/
 void autocor(dtype * __restrict r, const dtype * __restrict x, int autocor_len, int lag);
 void fast_autocor(dtype * __restrict r, const dtype * __restrict x, int autocor_len, int lag, pIdx r_idx, pIdx x_idx);
+dtype fir_filtering(dtype * x1, dtype * x2, const  size_t size);
+dtype fast_fir_filtering(dtype * x1, dtype * x2, const  size_t size, pIdx idx);
+dtype fast_fir_filtering_dpidx(dtype * x1, dtype * x2, const  size_t size, pIdx idx1, pIdx idx2);
 
 /* wrapper function : cor */
 #define fa_autocor autocor

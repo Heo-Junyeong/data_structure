@@ -9,14 +9,15 @@
 #include "fast_array.h"
 #include "util.h"
 
-#define LENGTH 10000
+#define LENGTH 1000
 #define LENGTH2 ((2) * (LENGTH))
 
 #define ITERATION 1000000
 
-#define ORDER 1
+#define ORDER 10
 
-#define __DEBUG4__
+#define __DEBUG5__
+
 #ifdef __DEBUG2__
 
 int main(void)
@@ -101,27 +102,30 @@ int main(void)
 #define L2 512 // ((L)/(2))
 
 int main(void)
-{
-	int x[L] = { 0, }, w[L] = { 0, };
-	int k, s, y = 0;
-	pIdx idx = L2;
+{	
+	/* local variables for lms routine */
+	dtype lms_x[LENGTH];	// input signal
+	dtype lms_h[ORDER];	// filter weight
+	dtype lms_y[LENGTH]; // filter output
+	dtype lms_d[LENGTH]; // desired input
+	dtype lms_e = 0; // error signal
 
-	for (k = 0; k < L; k++) x[k] = 1;
-	for (k = 0; k < L; k++) w[k] = 1;
+	float f0 = 880, fs = 8000, phase = 0;
+	int i = 2;
 
-	s = L - idx;
-	for (k = 0; k < idx; k++)
+	cos_(lms_d, LENGTH, 880, 8000, 0);
+	sin_(lms_x, LENGTH, 880, 8000, 0);
+	zeros(lms_y, LENGTH);
+	zeros(lms_h, ORDER);
+
+	scaling(lms_d, LENGTH, 30);
+
+	while (i < 10)
 	{
-		y += x[k] * w[s - k];
-		printf("%d ", s - k);
+		printf("final error : %f \n", fa_lms(lms_x, lms_h, lms_d, lms_y, 0.01, lms_e, ORDER, 20));
+		i++;
 	}
-
-	printf("\n");
-	s = L - idx;
-	for (k = idx; k < L; k++) //y += x[k] * w[s - k];
-	{
-		printf("%d ", s - k);
-	}
+	print_arr1d(lms_h, ORDER, "float");
 }
 #endif
 
@@ -135,5 +139,30 @@ int main(void)
 	read_data_file(brr, 10, "test", '\t', "int32");
 
 	print_arr1d(brr, 10, "int");
+	printf("%s", concat("a", "b"));
+
+	printf("Multi-channel LMS Test");
+
+
 }
+#endif
+
+#ifdef __DEBUG5__
+
+int main(void)
+{
+#define ONE_PERIOD 40000
+	/* local variables for lms routine */
+	dtype lms_x[ONE_PERIOD];	// input signal
+	dtype lms_h[ONE_PERIOD];	// filter weight
+
+	fast_cos(lms_x, ONE_PERIOD, 10, 4000);
+	fast_sin(lms_h, ONE_PERIOD, 10, 4000);
+
+	print_arr1d(lms_x, ONE_PERIOD, "float");
+	print_arr1d(lms_h, ONE_PERIOD, "float");
+
+	printf("cdot = %f \n", fir_filtering(lms_x, lms_h, ONE_PERIOD));
+}
+
 #endif

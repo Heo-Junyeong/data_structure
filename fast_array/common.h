@@ -19,12 +19,13 @@
 #define PI_M ((4) * atan(1));
 #define DEG2RAD(x) ((x)*((PI)/(180)))
 
+#define DTYPE double
+#define MACRO_TO_STRING(x) #x
 
 typedef char* string_dir;
 typedef char* type_t;
 
-typedef int dtype; // for general programming
-//typedef float dtype; // for general programming
+typedef DTYPE dtype; // for general programming
 
 typedef int pIdx; // pointer index
 
